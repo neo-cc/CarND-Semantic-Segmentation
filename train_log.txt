@@ -1133,5 +1133,5 @@ Loss = 0.038
 Loss = 0.047
 Loss = 0.045
 
-Training Finished. Saving test images to: ./runs/1509298204.317423
-3
+Training Finished. Saving test images to: ./runs/1509298204.3174233
+
