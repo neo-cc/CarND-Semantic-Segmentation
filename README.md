@@ -1,6 +1,20 @@
 # Semantic Segmentation
 ### Introduction
-In this project, you'll label the pixels of a road in images using a Fully Convolutional Network (FCN).
+In this project, I labelled the pixels of a road in images using a Fully Convolutional Network (FCN). The model is based on VGG16 network with pre-trained value, by adding 1x1 convolutions, upsampling and skip layers to build the FCN. This FCN model for Semantic Segmentation is from [here](https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf).
+
+
+AWS (instants type: `g3.4xlarge`, AMI: `udacity-carnd-advanced-deep-learning`) is used to train the FCN. There are only 4 hyper parameters, and after fine tune I decided to use following values:
+ 
+ - Epochs: 40
+ - Batch Size: 10
+ - Learning Rate: 0.0005
+ - Dropouts(keep_prob): 0.5
+
+The final output images are in `run/1509253607.271929`
+
+Below is the gif output:
+[image1]: ./run/1509253607.271929/FCN.gif
+![alt text][image1]
 
 ### Setup
 ##### Frameworks and Packages
