@@ -57,20 +57,25 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     layer7_out = tf.layers.conv2d(vgg_layer7_out, num_classes, 1, padding='same',
                                   kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     layer7_upsample = tf.layers.conv2d_transpose(layer7_out, num_classes, 4, strides= (2, 2) , padding='same',
-                                                 kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+                                                 kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3),
+                                                 kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
                                         
     layer4_in = tf.layers.conv2d(vgg_layer4_out, num_classes, 1, padding='same',
-                                  kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+                                 kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3),
+                                 kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
     layer4_out = tf.add(layer7_upsample, layer4_in)
     
     layer4_upsample = tf.layers.conv2d_transpose(layer4_out, num_classes, 4, strides= (2, 2) , padding='same',
-                                                 kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+                                                 kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3),
+                                                 kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
     layer3_in = tf.layers.conv2d(vgg_layer3_out, num_classes, 1, padding='same',
-                                 kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+                                 kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3),
+                                 kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
     layer3_out = tf.add(layer4_upsample, layer3_in)
     
     model = tf.layers.conv2d_transpose(layer3_out, num_classes, 16, strides= (8, 8), padding= 'same',
-                                       kernel_regularizer= tf.contrib.layers.l2_regularizer(1e-3))
+                                       kernel_regularizer= tf.contrib.layers.l2_regularizer(1e-3),
+                                       kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
     return model
 tests.test_layers(layers)
 
@@ -120,7 +125,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
         # training
         _, loss = sess.run([train_op, cross_entropy_loss],
                            feed_dict={input_image: image, correct_label: label,
-                           keep_prob: 0.5, learning_rate: 0.0005})                  # tune later
+                           keep_prob: 0.5, learning_rate: 0.0001})                  # tune later
         print("Loss = {:.3f}".format(loss))
       print()
 tests.test_train_nn(train_nn)
@@ -140,8 +145,8 @@ def run():
     # You'll need a GPU with at least 10 teraFLOPS to train on.
     #  https://www.cityscapes-dataset.com/
     
-    epochs = 30
-    batch_size = 10
+    epochs = 15
+    batch_size = 4
 
     with tf.Session() as sess:
         # Path to vgg model
